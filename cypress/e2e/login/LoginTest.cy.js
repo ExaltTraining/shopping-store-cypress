@@ -2,17 +2,19 @@ import AppHelper from "../../support/AppHelper";
 import { defaultLogin, invalidLogin, LOCATORS } from "../../support/login/LoginHelper";
 
 describe('testing login', () => {
-    it('login with valid email and password', () => {
+
+    beforeEach(() => {
         cy.visit("/");
         AppHelper.click(cy, AppHelper.LOCATORS.BUTTONS.HEADER.LOGIN_PAGE);
+    });
+
+    it('login with valid email and password', () => {
         defaultLogin(cy);
-        cy.get(LOCATORS.HEADERS.MAIN.TITLE).should("contain.text", "My account");
+        cy.get(LOCATORS.HEADERS.MAIN.TITLE.ELEMENT).should("contain.text", LOCATORS.HEADERS.MAIN.TITLE.MESSAGE);
     });
 
     it.only('login with invalid email and password', () => {
-        cy.visit("/");
-        AppHelper.click(cy, AppHelper.LOCATORS.BUTTONS.HEADER.LOGIN_PAGE);
         invalidLogin(cy);
-        cy.get("#center_column ol > li").should("contain.text", "Invalid email address.");
+        cy.get(LOCATORS.ALERT.INVALID_EMAIL.ELEMENT).should("contain.text", LOCATORS.ALERT.INVALID_EMAIL.MESSAGE);
     });
 });

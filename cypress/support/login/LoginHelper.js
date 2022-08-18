@@ -13,7 +13,16 @@ const LOCATORS = {
     },
     HEADERS: {
         MAIN: {
-            TITLE: "#center_column > h1"
+            TITLE: {
+                ELEMENT: "#center_column > h1",
+                MESSAGE: "My account"
+            }
+        }
+    },
+    ALERT: {
+        INVALID_EMAIL: {
+            ELEMENT: "#center_column ol > li",
+            MESSAGE: "Invalid email address."
         }
     }
 }
