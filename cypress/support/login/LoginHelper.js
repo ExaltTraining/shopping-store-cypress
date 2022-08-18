@@ -28,6 +28,10 @@ const defaultLogin = (cy) => {
     login(cy, mainData.MAIN_ACCOUNT.EMAIL, mainData.MAIN_ACCOUNT.PASSWORD);
 }
 
+const invalidLogin = (cy) => {
+    login(cy, "invalidAccount@website", "qq");
+}
+
 export default {
-    LOCATORS, login, defaultLogin
+    LOCATORS, login, defaultLogin, invalidLogin
 }

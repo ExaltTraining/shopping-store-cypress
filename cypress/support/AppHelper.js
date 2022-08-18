@@ -1,3 +1,17 @@
+
+const LOCATORS = {
+    BUTTONS: {
+        HEADER: {
+            LOGIN_PAGE: "#header a[class=login]"
+        }
+    },
+    HEADERS: {
+        MAIN: {
+            TITLE: "#center_column > h1"
+        }
+    }
+}
+
 const click = (cy, lctr) => {
     cy.get(lctr).click();
 }
@@ -25,6 +39,7 @@ const addText = (cy, lctr, text) => {
 }
 
 export default {
+    LOCATORS,
     click, isElementExist,
     selectFromMenuByValue, selectFromMenuByText,
     enterText, addText
