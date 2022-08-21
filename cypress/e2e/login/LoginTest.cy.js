@@ -13,7 +13,7 @@ describe('testing login', () => {
         cy.get(LOCATORS.HEADERS.MAIN.TITLE.ELEMENT).should("contain.text", LOCATORS.HEADERS.MAIN.TITLE.MESSAGE);
     });
 
-    it.only('login with invalid email and password', () => {
+    it('login with invalid email and password', () => {
         invalidLogin(cy);
         cy.get(LOCATORS.ALERT.INVALID_EMAIL.ELEMENT).should("contain.text", LOCATORS.ALERT.INVALID_EMAIL.MESSAGE);
     });
