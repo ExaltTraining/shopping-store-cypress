@@ -2,6 +2,11 @@ import mainData from "../../fixtures/mainData.json";
 import AppHelper from "../AppHelper";
 
 const LOCATORS = {
+    PATH: {
+        CATEGORIES: {
+            WOMEN: "/index.php?id_category=3&controller=category"
+        }
+    },
     MAIN: {
         VIEW: {
             GRID: "ul.display #grid a",
@@ -13,6 +18,13 @@ const LOCATORS = {
                 OPTION_VALUES: {
                     PRICE_ASC: "price:asc",
                     NAME_DESC: "name:desc"
+                }
+            },
+            CART: {
+                CART_ITEMS: ".shopping_cart dl.products",
+                CART_ITEM: {
+                    ELEMENT: (index) => ".shopping_cart dl.products dt:nth-child(" + ((index - 1) * 2 + 1) + ")",
+                    DELETE: (index) => LOCATORS.MAIN.MENU.CART.CART_ITEM.ELEMENT(index) + " .ajax_cart_block_remove_link"
                 }
             }
         },
@@ -53,7 +65,8 @@ const LOCATORS = {
     },
     BUTTONS: {
         MAIN: {
-            LOGIN: "#SubmitLogin"
+            LOGIN: "#SubmitLogin",
+            CART: "header div.shopping_cart > a"
         }
     },
     HEADERS: {
@@ -69,21 +82,39 @@ const LOCATORS = {
             ELEMENT: "#center_column ol > li",
             MESSAGE: "Invalid email address."
         }
+    },
+    PRODUCT_ADDED_CART_LAYER: {
+        LAYER: "#layer_cart",
+        BUTTON: {
+            CONTINUE_SHOPPING: "#layer_cart div.button-container span.continue span",
+            PROCEED_TO_CHECKOUT: "#layer_cart div.button-container a.btn span"
+        },
+        AND_DO: {
+            CONTINUE_SHOPPING: 1,
+            PROCEED_TO_CHECKOUT: 2
+        }
     }
 }
 
-const login = (cy, email, password) => {
-    AppHelper.enterText(cy, LOCATORS.ACCOUNT.EMAIL, email);
-    AppHelper.enterText(cy, LOCATORS.ACCOUNT.PASSWORD, password);
-    AppHelper.click(cy, LOCATORS.BUTTONS.MAIN.LOGIN);
+const login = (cy, email_lctr, email, password_lctr, password, submit) => {
+    AppHelper.enterText(cy, email_lctr, email);
+    AppHelper.enterText(cy, password_lctr, password);
+    AppHelper.click(cy, submit);
+}
+
+const basicLogin = (cy, email, password) => {
+    login(cy, LOCATORS.ACCOUNT.EMAIL, email, LOCATORS.ACCOUNT.PASSWORD, password, LOCATORS.BUTTONS.MAIN.LOGIN);
+    // AppHelper.enterText(cy, LOCATORS.ACCOUNT.EMAIL, email);
+    // AppHelper.enterText(cy, LOCATORS.ACCOUNT.PASSWORD, password);
+    // AppHelper.click(cy, LOCATORS.BUTTONS.MAIN.LOGIN);
 }
 
 const defaultLogin = (cy) => {
-    login(cy, mainData.MAIN_ACCOUNT.EMAIL, mainData.MAIN_ACCOUNT.PASSWORD);
+    basicLogin(cy, mainData.MAIN_ACCOUNT.EMAIL, mainData.MAIN_ACCOUNT.PASSWORD);
 }
 
 const invalidLogin = (cy) => {
-    login(cy, "invalidAccount@website", "qq");
+    basicLogin(cy, "invalidAccount@website", "qq");
 }
 
 const getView = (cy, callback) => {
@@ -158,9 +189,22 @@ const checkProductsShallBe = (cy, expectedList, callback) => {
     }));
 }
 
+const addProductToCart = (cy, index, andDo) => {
+    AppHelper.click(cy, LOCATORS.MAIN.LIST.PRODUCT.ADD_TO_CART(index));
+    AppHelper.waitUntilPrecenseOf(cy, 20, LOCATORS.PRODUCT_ADDED_CART_LAYER.LAYER);
+    if (andDo === LOCATORS.PRODUCT_ADDED_CART_LAYER.AND_DO.PROCEED_TO_CHECKOUT)
+        AppHelper.click(cy, LOCATORS.PRODUCT_ADDED_CART_LAYER.BUTTON.PROCEED_TO_CHECKOUT)
+    else
+        AppHelper.click(cy, LOCATORS.PRODUCT_ADDED_CART_LAYER.BUTTON.CONTINUE_SHOPPING)
+}
+
+const goToCart = (cy) => {
+    AppHelper.click(cy, LOCATORS.BUTTONS.MAIN.CART);
+}
+
 export default {
     LOCATORS, login, defaultLogin, invalidLogin, getView, setView,
     getMinPriceValue, getMaxPriceValue, getNumberOfProducts,
     checkProductsSortedAsNameDecs, checkProductsSortedAsPriceAsc, checkProductsShallBe,
-    setMaxPrice
+    setMaxPrice, addProductToCart, goToCart
 }

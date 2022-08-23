@@ -1,21 +1,15 @@
 import AppHelper from "../../support/AppHelper";
 import ProductsHelper from "../../support/products/ProductsHelper";
 
-describe('testing login', () => {
+describe('testing products - women category', () => {
     // sorting desc name ----- DONE
     // sorting asc price ----- DONE
-    // filtering cotton, new, color, price
+    // filtering cotton, new, color, price ----- DONE
     // setting view ----- DONE
     // in stock avialability ----- DONE
 
-    before(() => {
-        // cy.visit("/index.php?id_category=3&controller=category");
-        // ProductsHelper.setView(cy, ProductsHelper.LOCATORS.MAIN.VIEW.LIST);
-    });
-
     beforeEach(() => {
-        cy.visit("/index.php?id_category=3&controller=category");
-        // AppHelper.click(cy, AppHelper.LOCATORS.BUTTONS.HEADER.LOGIN_PAGE);
+        cy.visit(ProductsHelper.LOCATORS.PATH.CATEGORIES.WOMEN);
     });
 
     it('Validating setting the view of the products list', () => {
@@ -51,7 +45,7 @@ describe('testing login', () => {
         AppHelper.click(cy, ProductsHelper.LOCATORS.CATALOG.PROPERTIES.SHORT_SLEEVE);
         AppHelper.click(cy, ProductsHelper.LOCATORS.CATALOG.CONDITION.NEW);
         // using setMaxPrice overload the website and it won't responed anymore???
-        // ProductsHelper.setMaxPrice(cy, 20); 
+        ProductsHelper.setMaxPrice(cy, 20);
         AppHelper.waitUntillNotExist(cy, 20, ProductsHelper.LOCATORS.MAIN.LOADING);
         cy.get(ProductsHelper.LOCATORS.MAIN.LIST.PRODUCTS).should("have.lengthOf", 2);
         const expectedList = ["Faded Short Sleeve T-shirts", "Blouse"];

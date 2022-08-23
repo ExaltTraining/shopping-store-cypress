@@ -38,16 +38,36 @@ const addText = (cy, lctr, text) => {
     cy.get(lctr).type(text);
 }
 
-const getContentText = (cy, lctr, callback) => {
-    cy.get(lctr).invoke("text").then(text => callback(text.trim()));
+const getContentText = (cy, lctr, invoker, callback) => {
+    cy.get(lctr).invoke(invoker).then(text => callback(text.trim()));
 }
 
-const printContentText = (cy, lctr) => {
-    getContentText(cy, lctr, (text) => console.log(text));
+const getMultiContentText = (cy, lctrs, callback) => {
+    let rsString = "{";
+    let counter = 0, length = Object.keys(lctrs).length;
+    Object.keys(lctrs).forEach(key => {
+        getContentText(cy, lctrs[key].element, lctrs[key].invoker, (text) => {
+            counter++;
+            if (rsString.length > 1) rsString += ", ";
+            rsString += `"${key}": "${text}"`;
+            if (counter == length - 1) {
+                rsString += "}";
+                callback(JSON.parse(rsString));
+            }
+        });
+    });
 }
 
-const waitUntillNotExist = (cy, secs, lctr) => {
-    cy.get(lctr, { timeout: secs * 1000 }).should('not.exist');
+const printContentText = (cy, lctr, invoker) => {
+    getContentText(cy, lctr, invoker, (text) => console.log(text));
+}
+
+const waitUntillNotExist = (cy, timeOfSecs, lctr) => {
+    cy.get(lctr, { timeout: timeOfSecs * 1000 }).should('not.exist');
+}
+
+const waitUntilPrecenseOf = (cy, timeOfSecs, lctr) => {
+    cy.get(lctr, { timeout: timeOfSecs * 1000 }).should('be.visible');
 }
 
 export default {
@@ -55,5 +75,5 @@ export default {
     click, isElementExist,
     selectFromMenuByValue, selectFromMenuByText,
     enterText, addText, printContentText, getContentText,
-    waitUntillNotExist
+    waitUntillNotExist, waitUntilPrecenseOf, getMultiContentText
 }
