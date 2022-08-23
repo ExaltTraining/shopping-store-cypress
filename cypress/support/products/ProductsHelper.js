@@ -129,15 +129,15 @@ const setView = (cy, type) => {
 }
 
 const getMinPriceValue = (cy, callback) => {
-    AppHelper.getContentText(cy, LOCATORS.CATALOG.PRICE.RANGE, (value) => callback(value.split("-")[0].replace("$", "").trim()));
+    AppHelper.getContentText(cy, LOCATORS.CATALOG.PRICE.RANGE, "text", (value) => callback(value.split("-")[0].replace("$", "").trim()));
 }
 
 const getMaxPriceValue = (cy, callback) => {
-    AppHelper.getContentText(cy, LOCATORS.CATALOG.PRICE.RANGE, (value) => callback(value.split("-")[1].replace("$", "").trim()));
+    AppHelper.getContentText(cy, LOCATORS.CATALOG.PRICE.RANGE, "text", (value) => callback(value.split("-")[1].replace("$", "").trim()));
 }
 
 const getNumberOfProducts = (cy, callback) => {
-    AppHelper.getContentText(cy, LOCATORS.MAIN.LIST.PRODUCTS_NUMBER, (text) => callback(text.split(" ")[5].trim()));
+    AppHelper.getContentText(cy, LOCATORS.MAIN.LIST.PRODUCTS_NUMBER, "text", (text) => callback(text.split(" ")[5].trim()));
 }
 
 const setMaxPrice = (cy, maxValue) => {
@@ -152,7 +152,7 @@ const setMaxPrice = (cy, maxValue) => {
 const checkProductsSortedAsNameDecs = (cy, callback) => {
     let prevValue = "z";
     cy.get(LOCATORS.MAIN.LIST.PRODUCTS).each((e) => cy.wrap(e).within(() => {
-        AppHelper.getContentText(cy, "a.product-name", (name) => {
+        AppHelper.getContentText(cy, "a.product-name", "text", (name) => {
             if (name.toLowerCase().localeCompare(prevValue.toLowerCase()) == -1)
                 callback(false);
             prevValue = name;
@@ -164,7 +164,7 @@ const checkProductsSortedAsNameDecs = (cy, callback) => {
 const checkProductsSortedAsPriceAsc = (cy, callback) => {
     let prevValue = -1;
     cy.get(LOCATORS.MAIN.LIST.PRODUCTS).each((e) => cy.wrap(e).within(() => {
-        AppHelper.getContentText(cy, "div.right-block span.price.product-price", (price) => {
+        AppHelper.getContentText(cy, "div.right-block span.price.product-price", "text", (price) => {
             price = price.trim().replace("$", "");
             console.log(price);
             if (price < prevValue)
@@ -177,7 +177,7 @@ const checkProductsSortedAsPriceAsc = (cy, callback) => {
 
 const checkProductsShallBe = (cy, expectedList, callback) => {
     cy.get(LOCATORS.MAIN.LIST.PRODUCTS).each((e) => cy.wrap(e).within(() => {
-        AppHelper.getContentText(cy, "a.product-name", (name) => {
+        AppHelper.getContentText(cy, "a.product-name", "text", (name) => {
             let found = false;
             expectedList.forEach(expectedName => {
                 if (expectedName.toLowerCase() === name.toLowerCase()) { found = true; return; }

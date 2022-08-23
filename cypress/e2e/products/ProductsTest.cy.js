@@ -2,11 +2,6 @@ import AppHelper from "../../support/AppHelper";
 import ProductsHelper from "../../support/products/ProductsHelper";
 
 describe('testing products - women category', () => {
-    // sorting desc name ----- DONE
-    // sorting asc price ----- DONE
-    // filtering cotton, new, color, price ----- DONE
-    // setting view ----- DONE
-    // in stock avialability ----- DONE
 
     beforeEach(() => {
         cy.visit(ProductsHelper.LOCATORS.PATH.CATEGORIES.WOMEN);
