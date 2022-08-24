@@ -35,15 +35,15 @@ describe('testing products - women category', () => {
         cy.get(ProductsHelper.LOCATORS.MAIN.LIST.PRODUCTS).should("have.length", 7);
     });
 
-    it.only('Validating (cotton, new, short sleeve, and max price 20$) filters', () => {
+    it('Validating (cotton, new, short sleeve, and max price 20$) filters', () => {
         AppHelper.click(cy, ProductsHelper.LOCATORS.CATALOG.COMPOSITIONS.COTTON);
         AppHelper.click(cy, ProductsHelper.LOCATORS.CATALOG.PROPERTIES.SHORT_SLEEVE);
         AppHelper.click(cy, ProductsHelper.LOCATORS.CATALOG.CONDITION.NEW);
         // using setMaxPrice overload the website and it won't responed anymore???
         ProductsHelper.setMaxPrice(cy, 20);
         AppHelper.waitUntillNotExist(cy, 20, ProductsHelper.LOCATORS.MAIN.LOADING);
-        cy.get(ProductsHelper.LOCATORS.MAIN.LIST.PRODUCTS).should("have.lengthOf", 2);
-        const expectedList = ["Faded Short Sleeve T-shirts", "Blouse"];
+        cy.get(ProductsHelper.LOCATORS.MAIN.LIST.PRODUCTS).should("have.lengthOf", 1);
+        const expectedList = ["Faded Short Sleeve T-shirts"];
         ProductsHelper.checkProductsShallBe(cy, expectedList, (rs) => expect(rs).to.be.true);
     });
 
