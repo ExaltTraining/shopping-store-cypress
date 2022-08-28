@@ -14,7 +14,13 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import Page from '../pages/Page';
+import './commands';
+
+before(() => {
+    const page = new Page();
+    page.login();
+});
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
